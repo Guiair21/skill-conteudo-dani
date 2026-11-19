@@ -1,6 +1,7 @@
 ---
 name: vamos-trabalhar
-description: GATILHO OBRIGATÓRIO quando a usuária disser "vamos trabalhar" em qualquer forma, ou pedir para produzir conteúdo de um cliente do começo ao fim (post, carrossel, artigo, roteiro, pacote de aprovação). Pensado para conteúdo de controladoria, contabilidade, gestão financeira e tributário. Responda sempre em português.
+description: GATILHO OBRIGATÓRIO quando a usuária disser "vamos trabalhar" em qualquer forma, ou pedir para produzir conteúdo de um cliente do começo ao fim, principalmente artigo e produção editorial (também post, carrossel, roteiro, pacote de aprovação). Pensado para conteúdo de controladoria, contabilidade, gestão financeira e tributário. Responda sempre em português.
+model: sonnet
 ---
 
 # Vamos trabalhar · conteúdo do começo ao fim

@@ -1,7 +1,8 @@
 ---
 name: produzir-conteudo
-description: Use quando for produzir conteúdo de um cliente do começo ao fim, ou quando for pedida uma peça, pauta ou pacote para uma marca que tem config em config/<cliente>/. Responda sempre em português.
+description: Use quando for produzir conteúdo de um cliente do começo ao fim, principalmente artigo e produção editorial (artigo de blog, artigo de LinkedIn, estudo, material técnico), ou quando for pedida uma peça, pauta ou pacote para uma marca que tem config em config/<cliente>/. Responda sempre em português.
 user-invocable: true
+model: sonnet
 ---
 
 # Motor de conteúdo
@@ -27,6 +28,26 @@ substituí-lo. Um fluxo que só produz portão e auditoria entrega pouco, e o po
 
 **Leia junto:** `referencias/linha-de-montagem.md`. É o mapa de quem trabalha em cada estação e
 qual skill roda ali.
+
+## Quem faz o quê: a cadeia de modelos
+
+| Papel | Modelo | Quem | Faz |
+|---|---|---|---|
+| **Orquestrador** | Sonnet | esta skill (`model: sonnet`) | conduz as estações, escreve o artigo, aplica as correções, decide |
+| **Pesquisa** | Haiku | agente `pesquisador-fontes`, um por pergunta, em paralelo | acha a fonte primária e grava o dossiê com link e trecho |
+| **Conferência** | Haiku | agente `conferente-de-fontes` | reabre cada link (inclusive os do Gemini) e diz se confere |
+| **Revisão em loop** | Haiku | agentes `revisor-dados`, `revisor-estilo`, `revisor-editorial`, em paralelo | dão nota e reescrevem, até todas chegarem a 8 |
+| **Verificação final** | Opus | agente `verificador-final` | lê sem o viés dos revisores e aprova só com nota 9 ou mais |
+
+Os agentes moram na pasta `agents/` do repositório e precisam estar instalados em
+`~/.claude/agents/` (ver `README.md`). Se um deles não estiver instalado, chamar um subagente de
+uso geral com o mesmo modelo e colar o arquivo do agente como instrução. **A verificação final
+nunca roda no orquestrador:** quem escreveu não confere o próprio texto.
+
+**Artigo é o formato principal deste motor.** Pedido de artigo, estudo ou material editorial entra
+no **nível 3** por padrão (pesquisa completa, fontes primárias, os três revisores e a verificação
+final). Regras de forma em `referencias/formatos/artigo-blog.md` e `artigo-linkedin.md`; o roteiro
+editorial completo em `referencias/artigo-editorial.md`.
 
 ## Contrato de operação (autônomo é o padrão)
 
@@ -196,6 +217,42 @@ no `perfil.md`, seção "Skills e ativos que o motor pluga aqui"; o radar genér
 
 **Todo dado entra com link.** Não "conferido": o link, no texto.
 
+### 3a · Fontes primárias, com os pesquisadores (nível 3 e todo artigo)
+
+1. Quebrar a tese em **perguntas de pesquisa** (em geral de 3 a 6): cada número, norma ou fato
+   que o artigo vai precisar afirmar.
+2. Disparar um agente `pesquisador-fontes` (Haiku) **por pergunta, em paralelo**, com a pergunta,
+   o recorte, a pasta do trabalho e o caminho do `fontes-confiaveis.md`.
+3. Cada um grava um dossiê em `<pasta do trabalho>/fontes/`.
+
+### 3b · Pesquisa profunda do Gemini, pelo Chrome (opcional, para ampliar fontes)
+
+Quando a extensão **Claude in Chrome** estiver conectada e a usuária tiver conta no Gemini.
+Roteiro passo a passo em `referencias/pesquisa-gemini-chrome.md`. Em resumo:
+
+1. Abrir `gemini.google.com` no Chrome dela, com a conta dela já logada (nunca digitar senha).
+2. Ativar **Pesquisa Profunda** (Deep Research), colar a pergunta-mãe do artigo e pedir prioridade
+   a fontes primárias oficiais, com link e data de cada dado.
+3. Aprovar o plano de pesquisa que o Gemini propõe e esperar o relatório (leva alguns minutos).
+4. Copiar o relatório e **a lista de fontes com os links** para
+   `<pasta do trabalho>/pesquisa-gemini.md`.
+
+**O Gemini amplia a busca, não decide nada.** O relatório dele é pista: só os links que ele citar
+de fonte primária seguem para a 3c.
+
+### 3c · O fiel da balança: a pasta `fontes/`
+
+O agente `conferente-de-fontes` (Haiku) reabre cada link vindo da 3a e da 3b. Só o que **confere**
+na fonte primária fica salvo em `<pasta do trabalho>/fontes/`, com link, trecho literal e data.
+Essa pasta é o **fiel da balança** do artigo:
+
+- **Nenhum número entra no texto sem estar em `fontes/`.**
+- Quando o Gemini, a imprensa e o texto divergem, vale o que está em `fontes/`.
+- Os revisores e o verificador final conferem o artigo contra essa pasta.
+
+Sem nada conferido para o dado central da tese, o artigo não segue: volta à estação 1 com outro
+recorte.
+
 **A `last30days` traz conversa, não número.** Ela mostra como o mercado fala do assunto agora, e
 isso vira hook, título e objeção. Engajamento de post não é estatística e comentário de rede não é
 fonte primária: o número continua saindo daqui com link.
@@ -251,14 +308,19 @@ fluxo.
 Dois blocos, nesta ordem, detalhados em `referencias/revisao.md`. O teste da tese já rodou lá atrás,
 na estação 2b:
 
-1. **REVISORES (acham erro e reescrevem).** Dados, estilo, design, marca e persuasão. A skill de
-   cada papel está em `referencias/revisao.md`, com o que fazer à mão quando ela não estiver
-   instalada. Cada um dá **nota de 0 a 10** e lista de correções. **Loop até todas ≥ 8**, teto de 4
-   rodadas. Rode em paralelo, em mensagens separadas (skill de agentes em paralelo, se instalada;
-   senão, subagentes separados): revisor que lê o parecer do vizinho converge com ele e a nota perde
-   valor.
-2. **EDITOR ESTRATÉGICO (propõe melhor).** Papel separado, rubrica em
+1. **5a · REVISORES (Haiku, acham erro e reescrevem).** Os agentes `revisor-dados`,
+   `revisor-estilo` e `revisor-editorial`, disparados **em paralelo, na mesma mensagem**, cada um
+   sem ver o parecer do outro. Peça visual soma o revisor de design de `referencias/revisao.md`.
+   Cada um grava `revisao/<papel>.md` com **nota de 0 a 10** e a tabela de correções. **Loop até
+   todas ≥ 8**, teto de 4 rodadas. O orquestrador aplica a lista inteira entre uma rodada e outra.
+2. **5b · EDITOR ESTRATÉGICO (propõe melhor).** Papel separado, rubrica em
    `referencias/editor-estrategico.md`. Ele **escreve a alternativa**, não a descreve.
+3. **5c · VERIFICAÇÃO FINAL (Opus).** O agente `verificador-final` recebe só o artigo, a pasta
+   `fontes/` e a config do cliente, **sem a conversa e sem os pareceres anteriores**. Confere os
+   dados contra a fonte, a tese, a voz, as afirmações sobre o cliente e o CTA, e grava
+   `verificacao-final.md`. **APROVADO só com nota ≥ 9.** DEVOLVIDO volta ao orquestrador com a
+   lista, que corrige e manda de novo, até 3 rodadas, cada uma com um verificador novo. Na terceira
+   reprovação, o artigo vai para quem aprova junto com o boletim do que falhou, nunca como pronto.
 
 Rede mecânica, por cima do revisor de estilo e nunca no lugar dele:
 
