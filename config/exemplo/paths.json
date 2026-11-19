@@ -1,0 +1,11 @@
+{
+  "_comentario": "Caminhos do cliente. Relativos a esta pasta, ou absolutos na máquina de quem usa.",
+  "acervo": {
+    "LinkedIn": "acervo/LinkedIn",
+    "Instagram": "acervo/Instagram"
+  },
+  "producao": "producao",
+  "topicos": "topicos",
+  "diario": "Diario-de-Bordo.md",
+  "imagens": "imagens"
+}

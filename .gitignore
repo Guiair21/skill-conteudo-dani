@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+*.bak*
+.env
+*.env
+.secrets/
+# configs reais de cliente ficam fora do repositório; só o modelo sobe
+config/*
+!config/exemplo/
