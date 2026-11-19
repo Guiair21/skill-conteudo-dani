@@ -25,38 +25,60 @@ Antes de usar qualquer indicador mensal, checar na sala de imprensa do instituto
 se já saiu edição nova. "Verificado na fonte primária" não é o mesmo que "está
 atual", e o revisor de dados cobra as duas coisas.
 
-### Reestruturação (turnaround, RJ/extrajudicial, NPL)
-- **Serasa Experian**, sala de imprensa: indicador mensal de recuperações
-  judiciais e falências, e inadimplência PJ.
-- **Observatório da Insolvência (ABJ)**: deságio, tempo de processo, taxa de
-  aprovação de plano. É jurimetria, não opinião.
-- **CNJ**: estatística processual.
-- **Planalto**: Lei 11.101/2005 lida no artigo, nunca por resumo.
+Os endereços abaixo são as portas de entrada. O dado citado leva o link da página exata
+da série ou da norma, nunca só a home do órgão.
+
+### Contabilidade (normas, demonstrações, obrigações)
+- **CPC** ([cpc.org.br](https://www.cpc.org.br)): pronunciamentos técnicos, interpretações e
+  orientações. Citar pelo número (CPC 00, CPC 26, CPC 47) e conferir a revisão vigente.
+- **CFC** ([cfc.org.br](https://cfc.org.br)): Normas Brasileiras de Contabilidade (NBC TG,
+  NBC TA, NBC PG) e resoluções do Conselho.
+- **IFRS Foundation** ([ifrs.org](https://www.ifrs.org)): norma internacional que o CPC
+  converge. Usar quando o ângulo for comparação ou companhia com controle estrangeiro.
+- **SPED** ([sped.rfb.gov.br](http://sped.rfb.gov.br)): leiautes e manuais de ECD, ECF,
+  EFD ICMS/IPI e EFD-Contribuições. Prazo e multa saem daqui, nunca de blog.
+- **CVM** ([gov.br/cvm](https://www.gov.br/cvm)): regra de companhia aberta e demonstrações
+  publicadas (sistema RAD/ENET), boa fonte de exemplo real de nota explicativa.
 
 ### Performance (financeiro, controladoria/FP&A, BI, comercial)
-- **Banco Central**: API do SGS
-  (`api.bcb.gov.br/dados/serie/bcdata.sgs.NNNNN/dados?formato=json`) e as
-  Estatísticas Monetárias e de Crédito. Nunca sumarizar PDF do BCB: baixar e extrair.
-- **IBGE**: Demografia das Empresas, Cempre, IPCA, PIB.
-- **Sebrae**: Sobrevivência das Empresas (é a única série pública que isola porte
-  de forma útil) e Datasebrae.
-- **Mapa de Empresas (MDIC)**: abertura e fechamento de CNPJ, quadrimestral.
-- **FGV/IBRE**: sondagens empresariais e índices de confiança.
-- **CNI**: sondagem industrial, indicadores de custo.
-
-### Recebíveis, FIDC e crédito
-- **Anbima**: boletim de FIDC e de mercado de capitais (assina emissões).
-- **CVM**: Resolução 175 e normativos de fundos.
-- **Banco Central**: Resolução BCB 339/2023, convenção da duplicata escritural,
-  séries SGS de custo de crédito PJ.
-- **Registradoras** (CERC, B3, Núclea): estoque e volume registrado.
+- **Banco Central** ([SGS](https://www3.bcb.gov.br/sgspub)): API
+  (`api.bcb.gov.br/dados/serie/bcdata.sgs.NNNNN/dados?formato=json`) e as Estatísticas
+  Monetárias e de Crédito. Nunca sumarizar PDF do BCB: baixar e extrair.
+- **IBGE** ([ibge.gov.br](https://www.ibge.gov.br)): Demografia das Empresas, Cempre, IPCA, PIB.
+- **Sebrae** ([datasebrae.com.br](https://datasebrae.com.br)): Sobrevivência das Empresas (é a
+  única série pública que isola porte de forma útil).
+- **Mapa de Empresas, MDIC** ([gov.br/empresas-e-negocios](https://www.gov.br/empresas-e-negocios/pt-br/mapa-de-empresas)):
+  abertura e fechamento de CNPJ, quadrimestral.
+- **FGV/IBRE** ([portal.fgv.br/ibre](https://portal.fgv.br/ibre)): sondagens empresariais e
+  índices de confiança.
+- **CNI** ([portaldaindustria.com.br](https://www.portaldaindustria.com.br)): sondagem industrial,
+  indicadores de custo.
 
 ### Tributário e reforma
-- **Planalto**: LC 214/2025 e LC 227/2026, texto compilado, lido por artigo.
-- **Receita Federal** e **CGIBS**: cronograma e atos oficiais.
+- **Planalto** ([planalto.gov.br](https://www.planalto.gov.br)): LC 214/2025
+  ([texto](https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp214.htm)) e leis complementares
+  seguintes, texto compilado, lido por artigo.
+- **Receita Federal** ([gov.br/receitafederal](https://www.gov.br/receitafederal)) e **CGIBS**:
+  cronograma e atos oficiais.
+
+### Recebíveis, FIDC e crédito
+- **Anbima** ([anbima.com.br](https://www.anbima.com.br)): boletim de FIDC e de mercado de capitais.
+- **CVM**: Resolução 175 e normativos de fundos.
+- **Banco Central**: Resolução BCB 339/2023, convenção da duplicata escritural, séries SGS de
+  custo de crédito PJ.
+- **Registradoras** (CERC, B3, Núclea): estoque e volume registrado.
+
+### Reestruturação (quando o tema for crise, recuperação judicial ou inadimplência)
+- **Serasa Experian** ([sala de imprensa](https://www.serasaexperian.com.br/sala-de-imprensa)):
+  indicador mensal de recuperações judiciais e falências, e inadimplência PJ.
+- **Observatório da Insolvência, ABJ** ([abj.org.br](https://abj.org.br)): deságio, tempo de
+  processo, taxa de aprovação de plano.
+- **CNJ** ([cnj.jus.br](https://www.cnj.jus.br)): estatística processual.
+- **Lei 11.101/2005** ([texto](https://www.planalto.gov.br/ccivil_03/_ato2004-2006/2005/lei/l11101.htm)),
+  lida no artigo, nunca por resumo.
 
 ### Fontes regionais (quando o ângulo for local)
-- Federação da indústria, junta comercial e instituto de pesquisa do estado em questão. Exemplo: no Paraná, Fiep, JucePAR e Ipardes.
+- Federação da indústria, junta comercial e instituto de pesquisa do estado em questão.
 
 
 ---

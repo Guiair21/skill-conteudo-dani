@@ -1,8 +1,8 @@
 # <Cliente> · o que funciona, medido
 
-Última apuração: **01/01/2026**
+Última apuração: **19/11/2026**
 
-Troque a data acima pela da apuração real: o `check_entrega.py` avisa depois de 60 e de 90 dias.
+Troque a data acima pela da apuração real. O `check_entrega.py` avisa depois de 60 dias e reprova depois de 90.
 Sem medição ainda, escreva "sem dado" em cada linha e o motor escolhe o formato pelo objetivo da
 peça, declarando que não há número.
 
