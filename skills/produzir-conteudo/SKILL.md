@@ -367,25 +367,8 @@ decide se a peça é visual: quem decide isso é o formato escolhido em `formato
 Ordem de prioridade no `marca.md` do cliente. Regra que vale em qualquer marca: **não gerar do zero
 se já existe**, e **abrir toda imagem antes de usar**, porque nome de arquivo não descreve conteúdo.
 
-### Gerar imagem pelo Codex (assinatura do ChatGPT, sem chave de API)
-
-Quando precisar gerar (capa de artigo, ilustração conceitual, fundo), usar o Codex CLI logado na
-conta do ChatGPT da usuária. Roda dentro da assinatura: sem `OPENAI_API_KEY` e sem cobrança por
-imagem.
-
-```bash
-python "<pasta-da-skill>/ferramentas/gerar_imagem.py" "<briefing da imagem>" --cliente <cliente> --marca <cliente> --nome <slug> --abrir
-```
-
-- O script chama o Codex, acha o PNG gerado e copia para a pasta `imagens` do `paths.json`.
-- `--seco` mostra o pedido sem gastar nada; `--ref arquivo.png` edita uma imagem existente;
-  `--variacoes N` gera várias de uma vez.
-- Briefing bom tem: assunto, estilo, composição e uma proibição. **Nada de texto dentro da
-  imagem**: título e número vão em camada de HTML no card.
-- Leva de 1 a 3 minutos por imagem.
-- Se der "nenhuma imagem nova", rodar com `--seco`, conferir o pedido e tentar de novo. Se o
-  Codex não estiver instalado ou logado, avisar e seguir sem a imagem: o passo a passo está no
-  `README.md`.
+Quando precisar gerar, usar a skill **`gerar-imagem`** (Codex CLI na conta do ChatGPT). Se o Codex
+ainda não estiver instalado, ela orienta a instalação.
 
 ## Estação 7 · Produção e entrega
 

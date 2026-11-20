@@ -21,7 +21,7 @@ from datetime import date
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent
-sys.path.insert(0, str(RAIZ))
+sys.path.insert(0, str(RAIZ.parent / "produzir-conteudo" / "ferramentas"))
 from _clientes import pasta_cliente as _pasta_cliente  # config/<cliente> ou MOTOR_CONFIG_DIR
 
 
