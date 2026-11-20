@@ -1,8 +1,10 @@
 # Pesquisa profunda do Gemini, pelo Chrome (estação 3b)
 
-Serve para **ampliar o leque de fontes** de um artigo. O Gemini varre muito mais páginas do que
-uma busca manual e devolve um relatório com as fontes que leu. Este motor usa esse relatório como
-**mapa de onde procurar**, nunca como fonte.
+É a pesquisa **secundária**: traz contexto, ângulos e pistas. O Gemini varre muitas páginas e
+devolve muita coisa que não é fonte primária nem validada. Por isso o relatório dele nunca é fonte:
+cada dado precisa ser validado na fonte primária (estação 3c), e quem decide o que entra é o
+orquestrador, com o Opus nos casos duvidosos. A pesquisa primária, que vale como fonte, é a dos
+agentes Haiku (estação 3a).
 
 ## Pré-requisitos
 

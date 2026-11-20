@@ -33,5 +33,12 @@ Grave `<pasta>/verificacao-final.md` com:
 - **Veredito: APROVADO** (nota ≥ 9) **ou DEVOLVIDO**, com a lista exata do que corrigir, em
   ordem de gravidade, com arquivo e trecho.
 
+## Modo consulta (estação 3c)
+
+Quando o orquestrador chamar você com "consulta" e um caso duvidoso de fonte (fontes que divergem,
+norma alterada, dado só em fonte secundária, interpretação de regra), abra as fontes envolvidas e
+responda em poucas linhas: **ENTRA** ou **NÃO ENTRA**, o motivo e o link que vale. Nesse modo, não
+avalie o artigo.
+
 Dado divergente da fonte é sempre DEVOLVIDO, qualquer que seja o resto. Não suavize: nota
 errada para cima custa mais caro que uma rodada a mais.

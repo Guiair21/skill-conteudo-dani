@@ -35,7 +35,8 @@ qual skill roda ali.
 |---|---|---|---|
 | **Orquestrador** | Sonnet | esta skill (`model: sonnet`) | conduz as estações, escreve o artigo, aplica as correções, decide |
 | **Pesquisa** | Haiku | agente `pesquisador-fontes`, um por pergunta, em paralelo | acha a fonte primária e grava o dossiê com link e trecho |
-| **Conferência** | Haiku | agente `conferente-de-fontes` | reabre cada link (inclusive os do Gemini) e diz se confere |
+| **Conferência** | Haiku | agente `conferente-de-fontes` | reabre cada link e procura a fonte primária dos dados do Gemini |
+| **Decisão do que entra** | Sonnet, e Opus quando travar | orquestrador; `verificador-final` em modo consulta | decide o que vai para a pasta `fontes/` |
 | **Revisão em loop** | Haiku | agentes `revisor-dados`, `revisor-estilo`, `revisor-editorial`, em paralelo | dão nota e reescrevem, até todas chegarem a 8 |
 | **Verificação final** | Opus | agente `verificador-final` | lê sem o viés dos revisores e aprova só com nota 9 ou mais |
 
@@ -44,10 +45,9 @@ Os agentes moram na pasta `agents/` do repositório e precisam estar instalados 
 uso geral com o mesmo modelo e colar o arquivo do agente como instrução. **A verificação final
 nunca roda no orquestrador:** quem escreveu não confere o próprio texto.
 
-**Artigo é o formato principal deste motor.** Pedido de artigo, estudo ou material editorial entra
-no **nível 3** por padrão (pesquisa completa, fontes primárias, os três revisores e a verificação
-final). Regras de forma em `referencias/formatos/artigo-blog.md` e `artigo-linkedin.md`; o roteiro
-editorial completo em `referencias/artigo-editorial.md`.
+**Artigo é o formato principal da Dani** (contábil, tributário, reforma tributária). Pedido de
+artigo entra no **nível 3** por padrão. Regras de forma em `referencias/formatos/artigo-blog.md` e
+`artigo-linkedin.md`.
 
 ## Contrato de operação (autônomo é o padrão)
 
@@ -225,25 +225,31 @@ no `perfil.md`, seção "Skills e ativos que o motor pluga aqui"; o radar genér
    o recorte, a pasta do trabalho e o caminho do `fontes-confiaveis.md`.
 3. Cada um grava um dossiê em `<pasta do trabalho>/fontes/`.
 
-### 3b · Pesquisa profunda do Gemini, pelo Chrome (opcional, para ampliar fontes)
+### 3b · Pesquisa do Gemini, pelo Chrome: contexto, não fonte
 
-Quando a extensão **Claude in Chrome** estiver conectada e a usuária tiver conta no Gemini.
-Roteiro passo a passo em `referencias/pesquisa-gemini-chrome.md`. Em resumo:
+São **duas pesquisas com papéis diferentes**:
 
-1. Abrir `gemini.google.com` no Chrome dela, com a conta dela já logada (nunca digitar senha).
-2. Ativar **Pesquisa Profunda** (Deep Research), colar a pergunta-mãe do artigo e pedir prioridade
-   a fontes primárias oficiais, com link e data de cada dado.
-3. Aprovar o plano de pesquisa que o Gemini propõe e esperar o relatório (leva alguns minutos).
-4. Copiar o relatório e **a lista de fontes com os links** para
-   `<pasta do trabalho>/pesquisa-gemini.md`.
+| Pesquisa | Quem roda | Para quê | Vale como fonte? |
+|---|---|---|---|
+| **Primária** (3a) | agentes Haiku, a fundo | achar o dado na origem: norma, órgão, instituto | **sim**, depois da conferência |
+| **Gemini** (3b) | Pesquisa Profunda no Chrome da usuária, pela extensão Claude in Chrome | trazer contexto, ângulos, discussões e pistas de onde procurar | **não**: traz muita coisa que não é fonte primária nem validada |
 
-**O Gemini amplia a busca, não decide nada.** O relatório dele é pista: só os links que ele citar
-de fonte primária seguem para a 3c.
+Roteiro do Gemini em `referencias/pesquisa-gemini-chrome.md`: abrir `gemini.google.com` com a
+conta dela já logada, ligar a Pesquisa Profunda, colar a pergunta, esperar o relatório e salvar em
+`<pasta do trabalho>/pesquisa-gemini.md` com a lista de links. Sem a extensão ou sem login, pular e
+registrar em uma linha.
+
+**Todo dado que vier do Gemini precisa ser validado na fonte primária** antes de entrar. Se a
+fonte primária não aparecer, o dado fica de fora, por mais útil que pareça.
 
 ### 3c · O fiel da balança: a pasta `fontes/`
 
-O agente `conferente-de-fontes` (Haiku) reabre cada link vindo da 3a e da 3b. Só o que **confere**
-na fonte primária fica salvo em `<pasta do trabalho>/fontes/`, com link, trecho literal e data.
+O agente `conferente-de-fontes` (Haiku) reabre cada link da 3a e procura a fonte primária de cada
+dado da 3b. **Quem decide o que entra é o orquestrador (Sonnet)**, olhando o veredito do
+conferente. Caso duvidoso (fontes que divergem, norma com alteração recente, dado que só aparece em
+fonte secundária, interpretação de regra da reforma), o Sonnet não decide sozinho: **pede ao Opus**
+(agente `verificador-final`, no modo consulta) e registra a decisão em uma linha. Só o que foi
+aprovado fica salvo em `<pasta do trabalho>/fontes/`, com link, trecho literal e data.
 Essa pasta é o **fiel da balança** do artigo:
 
 - **Nenhum número entra no texto sem estar em `fontes/`.**
@@ -360,6 +366,26 @@ decide se a peça é visual: quem decide isso é o formato escolhido em `formato
 
 Ordem de prioridade no `marca.md` do cliente. Regra que vale em qualquer marca: **não gerar do zero
 se já existe**, e **abrir toda imagem antes de usar**, porque nome de arquivo não descreve conteúdo.
+
+### Gerar imagem pelo Codex (assinatura do ChatGPT, sem chave de API)
+
+Quando precisar gerar (capa de artigo, ilustração conceitual, fundo), usar o Codex CLI logado na
+conta do ChatGPT da usuária. Roda dentro da assinatura: sem `OPENAI_API_KEY` e sem cobrança por
+imagem.
+
+```bash
+python "<pasta-da-skill>/ferramentas/gerar_imagem.py" "<briefing da imagem>" --cliente <cliente> --marca <cliente> --nome <slug> --abrir
+```
+
+- O script chama o Codex, acha o PNG gerado e copia para a pasta `imagens` do `paths.json`.
+- `--seco` mostra o pedido sem gastar nada; `--ref arquivo.png` edita uma imagem existente;
+  `--variacoes N` gera várias de uma vez.
+- Briefing bom tem: assunto, estilo, composição e uma proibição. **Nada de texto dentro da
+  imagem**: título e número vão em camada de HTML no card.
+- Leva de 1 a 3 minutos por imagem.
+- Se der "nenhuma imagem nova", rodar com `--seco`, conferir o pedido e tentar de novo. Se o
+  Codex não estiver instalado ou logado, avisar e seguir sem a imagem: o passo a passo está no
+  `README.md`.
 
 ## Estação 7 · Produção e entrega
 

@@ -40,7 +40,18 @@ Duas skills trabalham juntas:
 5. Para a pesquisa profunda do Gemini (opcional): instale a extensão **Claude in Chrome**, conecte
    ao Claude Code e deixe o Gemini logado no seu Chrome. Roteiro em
    `skills/produzir-conteudo/referencias/pesquisa-gemini-chrome.md`. Nenhuma chave de API é usada.
-6. Python 3.10 ou mais novo. As ferramentas usam só a biblioteca padrão. O `check_layout.py` e o
+6. Para gerar imagem (opcional, usa a assinatura do ChatGPT): instale o Node.js e, no PowerShell,
+   rode uma vez:
+
+   ```powershell
+   npm install -g @openai/codex
+   codex login
+   ```
+
+   O `codex login` abre o navegador: entre com a conta do ChatGPT. Para testar sem gastar nada:
+   `python skills/produzir-conteudo/ferramentas/gerar_imagem.py "teste" --cliente exemplo --seco`.
+   Nenhuma chave de API é usada.
+7. Python 3.10 ou mais novo. As ferramentas usam só a biblioteca padrão. O `check_layout.py` e o
    gerador de PDF precisam do Google Chrome instalado.
 
 ## Primeiro uso
